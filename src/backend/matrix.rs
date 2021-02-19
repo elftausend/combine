@@ -185,7 +185,7 @@ impl <T: 'static>Matrix<T>
             addend.push(minuend-subtrahend.unwrap());
             
         }
-        Matrix::from_vector(self.rows, self.cols, addend)
+        Matrix {rows: self.rows, cols: self.cols, data: addend}
     }
 
     pub fn div(self, other: Matrix<T>) -> Matrix<T> {
@@ -201,12 +201,14 @@ impl <T: 'static>Matrix<T>
             addend.push(minuend/subtrahend.unwrap());
             
         }
-        Matrix::from_vector(self.rows, self.cols, addend)
+        Matrix {rows: self.rows, cols: self.cols, data: addend}
     }
+   // #[inline]
     pub fn add(self, other: Matrix<T>) -> Matrix<T> {
-        if self.shape() != other.shape() {
-            panic!("Both matrices have to have the same shape!")
-        }
+
+        //if self.shape() != other.shape() {
+         //   panic!("Both matrices have to have the same shape!")
+        //}
         let mut addend: Vec<T> = Vec::new();
         let other_data = other.data; 
         let mut summand2 = other_data.into_iter();
@@ -217,7 +219,7 @@ impl <T: 'static>Matrix<T>
             
         }
 
-        Matrix::from_vector(self.rows, self.cols, addend)
+        Matrix {rows: self.rows, cols: self.cols, data: addend}
     }
 
     ///Only checks 1000 elements on equality.
@@ -258,7 +260,7 @@ impl <T: 'static>Matrix<T>
             value.push(minuend*subtrahend.unwrap());
             
         }
-        Matrix::from_vector(self.rows, self.cols, value)
+        Matrix {rows: self.rows, cols: self.cols, data: value}
     }
     
 }

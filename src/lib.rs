@@ -161,17 +161,14 @@ fn performance() -> Duration {
   let m: Matrix<f32> = Matrix::from_vector(3, 2, vec1);
   let m2: Matrix<f32> = Matrix::from_vector(2, 3, vec2);
 
-  let a = Matrix::new(500, 100, 9f32);
-  let b = Matrix::new(100, 500, 51f32);
+  let a = Matrix::new(1000, 1000, 4f32);
+  let b = Matrix::new(1000, 1000, 5f32);
   
-
-  let a: f64 = 14.524358972938472983423;
-  let b: f64 = 18.912307492349493332228;
-
   let time_before = Instant::now();
  // let c = a.rdot(b);
   //b.sum();
-  let x = a*b;
+ // a.sum();
+ // b.sum();
 
   let time_after = Instant::now();
   return time_after-time_before;
@@ -180,7 +177,9 @@ fn performance() -> Duration {
 //0.0000156
 #[test]
 fn test() {
-    network_test();
+ // let m: Matrix<f32> = Matrix::rand(50000, 30000);
+  std::process::exit(0);
+  //  network_test();
 
   //0.000000005336447  f32
   //0.000000005326992  f64
@@ -199,7 +198,7 @@ fn test() {
 
     //println!("matrix: {:?}", matrix);
     
-    let iter = 100000;
+    let iter = 10000;
     let mut duration = 0.;
     for x in 0..iter {
       let dur: Duration = performance();
