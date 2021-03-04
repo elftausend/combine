@@ -3,9 +3,10 @@ use crate::ActivationType;
 use std::*;
 use std::io::prelude::*;
 
+use crate::Matrix;
 use crate::nn::*;
 use crate::structual::ModuleType;
-use crate::Matrix;
+
 
 pub struct WeightsStore;
 
@@ -98,7 +99,7 @@ impl WeightsStore {
                     let vec = get_data(string.clone());
                     let shape = get_shape(path.path());
                     let activation = get_act(path.path());
-                    return (i, ModuleType::from_vector(activation, Matrix::from_vector(shape.0, shape.1, vec)));
+                    return (i, ModuleType::from_vector(activation, Matrix::from_vec(shape.0, shape.1, vec)));
                 
 
                     })
@@ -139,7 +140,7 @@ impl WeightsStore {
             let vec = get_data(string.clone());
             let shape = get_shape(path.path());
             let activation = get_act(path.path());
-            nn.add(ModuleType::from_vector(activation, Matrix::from_vector(shape.0, shape.1, vec)));
+            nn.add(ModuleType::from_vector(activation, Matrix::from_vec(shape.0, shape.1, vec)));
             string = String::new();
 
 

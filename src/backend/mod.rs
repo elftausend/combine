@@ -1,10 +1,11 @@
 pub mod matrix;
 pub use matrix::*;
 
-pub mod traits;
-pub use traits::*;
+mod number;
+pub use number::*;
 
+mod random;
+pub use random::*;
 
-pub mod datatypes;
-pub use datatypes::*;
-
+mod sum;
+pub use sum::*;
