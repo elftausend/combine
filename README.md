@@ -12,7 +12,7 @@ My project [GateBuilder] is a whole dedicated example.
 This example simulates the XOR logic gate.
 
 ```rust
-use combine::{Matrix, Network, ModuleType, WeightsStore, ActivationType::Sigmoid, Optimizer};
+use combine::{Matrix, Network, ModuleType, WeightsStore, ActivationType::Sigmoid};
 
 //input values
 let xf = vec![0., 0.,
