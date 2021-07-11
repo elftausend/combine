@@ -10,7 +10,7 @@ pub use structual::*;
 #[cfg(test)]
 mod tests {
     
-    use crate::ActivationType;
+    use crate::{ActivationType, UES, XES, create_me_a_xes_vec, please_f32_from_xes};
 
     use super::Matrix;
     use super::structual::{Activation, ActivationType::{Sigmoid, Relu, None}, ModuleType, Network};
@@ -93,30 +93,63 @@ mod tests {
             0.];
 
 
-
-
         let x: Matrix<f32> = Matrix::from_vec(4, 2, xf);
         let y: Matrix<f32> = Matrix::from_vec(4, 1, yf);
 
-        let mut nn = Network::new(); //in Zusammenhang von f16; das ist auch f32!!
+        let mut nn = Network::new(); 
         nn.learning_rate(7.).aiming(&y);
 
         nn.add(ModuleType::new(Sigmoid, 2, 4));
-   //    nn.add(ModuleType::new(Sigmoid, 2, 4));
         nn.add(ModuleType::new(Sigmoid, 4, 1));
-
-        // let dots = nn.clone().dots;
-        // let aiming = nn.clone().aiming;
-
-
-
 
         let _time_before = Instant::now();
 
         let o = nn.forward(x.clone());
         println!("predictions before training: {:?}", o);
 
-        for z in 0..5000 { //230000
+        for z in 0..700000 { //230000
+            let cost = nn.forward_mse(x.clone(), y.clone()).sum();
+            nn.backwards(x.clone());
+        //   println!("cost: {:?}", cost/*.to_f32()*/);
+          //  if z%20000 == 1 { //1300, 820
+            //    println!("{:?}", cost/*.to_decimal()*/);
+          //  }
+        }
+        let o = nn.forward(x.clone());
+        println!("predictions after training: {:?}", o);
+    }
+    #[test]
+    fn xori8() {
+        let xf = vec![0i8, 0,
+        1, 0,
+        0, 1,
+        1, 1,];
+
+        //desired output
+        //XOR; 4x1 
+        let yf = vec![0,
+            1,
+            1,
+            0];
+
+
+        let x: Matrix<i8> = Matrix::from_vec(4, 2, xf);
+        let y: Matrix<i8> = Matrix::from_vec(4, 1, yf);
+
+        let mut nn = Network::new(); 
+        nn.learning_rate(0.05).aiming(&y);
+
+        nn.add(ModuleType::new(Sigmoid, 2, 4));
+        nn.add(ModuleType::new(Sigmoid, 4, 1));
+
+        println!("nn: {:?}", nn);
+
+        let _time_before = Instant::now();
+
+        let o = nn.forward(x.clone());
+        println!("predictions before training: {:?}", o);
+
+        for z in 0..700000 { //230000
             let cost = nn.forward_mse(x.clone(), y.clone()).sum();
             nn.backwards(x.clone());
         //   println!("cost: {:?}", cost/*.to_f32()*/);
@@ -213,4 +246,68 @@ mod tests {
 
 */
     }
+
+    #[test]
+    fn xes() {
+        let x = XES::new(4433);
+        let z = XES::new(1322);
+        let one = 0.443f32;
+        let two = 1.32f32;
+        println!("res {:?}", (x+z).to_f32());
+
+        let xf = vec![0., 0.,
+                            1., 0.,
+                            0., 1.,
+                            1., 1.,];
+
+        let xf = create_me_a_xes_vec(&xf);
+
+        //desired output
+        //XOR; 4x1 
+        let yf = vec![0.,
+                            1.,
+                            1.,
+                            0.];
+
+        let yf = create_me_a_xes_vec(&yf);
+
+
+        let x: Matrix<XES> = Matrix::from_vec(4, 2, xf);
+        let y: Matrix<XES> = Matrix::from_vec(4, 1, yf);
+
+        let mut nn = Network::new();
+        nn.learning_rate(1.).aiming(&y);
+
+        nn.add(ModuleType::new(Sigmoid, 2, 4));;
+        nn.add(ModuleType::new(Sigmoid, 4, 1));
+
+
+
+        let _time_before = Instant::now();
+
+        let o = nn.forward(x.clone());
+        println!("predictions before training: {:?}", o);
+
+        for z in 0..700000 { //230000
+            let cost = nn.forward_mse(x.clone(), y.clone()).sum();
+            nn.backwards(x.clone());
+           //println!("cost: {:?}", cost.to_f32());
+          //  if z%20000 == 1 { //1300, 820
+            //    println!("{:?}", cost/*.to_decimal()*/);
+          //  }
+        }
+        let o = nn.forward(x.clone());
+        let o = please_f32_from_xes(o);
+        println!("predictions after training: {:?}", o);
+    }
+}
+
+
+pub fn create_me_a_xes_vec(vec: &Vec<f32>) -> Vec<XES> {
+    vec.into_iter().map(|x| to_xes_format(*x)).collect()
+}
+
+pub fn please_f32_from_xes(matrix: Matrix<XES>) -> Matrix<f32> {
+    let data: Vec<f32> = matrix.data.into_iter().map(|x| x.to_f32()).collect();
+    Matrix::from_vec(matrix.rows, matrix.cols, data)
 }

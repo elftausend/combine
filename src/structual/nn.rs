@@ -17,7 +17,6 @@ impl <T>Network<T> where T: std::fmt::Debug + Number + Send + Clone + Copy + 'st
         for i in 0..self.weights.len() {
             let m = &mut self.weights[i];
             mltp_data = m.forward(&mltp_data);
-            println!("forward done");
             //println!("pushed in self.dots: {:?}", mltp_data.clone());
             self.dots.push(mltp_data.clone());
             
@@ -33,10 +32,8 @@ impl <T>Network<T> where T: std::fmt::Debug + Number + Send + Clone + Copy + 'st
     }
     //only sigmoid?!
     pub fn backwards(&mut self, mxf: Matrix<T>) { 
-        println!("HI");
         let mut dcdw: Vec<Matrix<T>> = Vec::new();
         let forward = self.forward(mxf.clone());
-        println!("forward done");
         let cost = self.aiming.sub(&forward).map(|x| T::mul(*x, T::number(2.)));
         let mut delta_data = cost.map(|x| T::mul(*x, T::number(-1.)));
 

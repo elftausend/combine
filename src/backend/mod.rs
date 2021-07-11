@@ -9,3 +9,6 @@ pub use random::*;
 
 mod sum;
 pub use sum::*;
+
+mod datatypes;
+pub use datatypes::*;

@@ -3,6 +3,8 @@ use std::cmp::Ordering;
 
 use rand::{Rng, prelude::ThreadRng};
 
+use crate::{XES, to_xes_format};
+
 
 
 
@@ -18,7 +20,88 @@ pub trait Number: Sized {
     fn rand(r: Range<Self>, thread: &mut ThreadRng) -> Self;
 }
 
-//here I could use a macro
+//here I could use a macro - (not actually but ok)
+
+impl Number for XES {
+    fn number(num: f32) -> Self {
+        to_xes_format(num)
+    }
+
+    fn exp(self: Self) -> Self {
+        XES::exp(&self)
+    }
+
+    fn pow(self: Self, rhs: Self) -> Self {
+        XES::pow(&self, rhs.to_f32())
+    }
+
+    fn mul(self: Self, rhs: Self) -> Self {
+        self*rhs
+    }
+
+    fn add(self: Self, rhs: Self) -> Self {
+        self+rhs
+    }
+
+    fn sub(self: Self, rhs: Self) -> Self {
+        self-rhs
+    }
+
+    fn div(self: Self, rhs: Self) -> Self {
+        self/rhs
+    }
+
+    fn comp(self: Self, rhs: Self) -> Option<Ordering> {
+        todo!()
+    }
+
+    fn rand(r: Range<Self>, rng: &mut ThreadRng) -> Self {
+        let num: f32 = rng.gen_range(0f32..1000f32)*2.-1000.;
+        if num > 0. {
+            XES {number: ((num as i16)*10)+3}
+        } else {
+            XES {number: ((num as i16)*10)-3}
+        }
+    }
+}
+
+impl Number for i8 {
+    fn number(num: f32) -> Self {
+        num as i8
+    }
+
+    fn exp(self: Self) -> Self {
+        (self as f32).exp() as i8
+    }
+
+    fn pow(self: Self, rhs: Self) -> Self {
+        i8::pow(self, rhs as u32)
+    }
+
+    fn mul(self: Self, rhs: Self) -> Self {
+        self*rhs
+    }
+
+    fn add(self: Self, rhs: Self) -> Self {
+        self+rhs
+    }
+
+    fn sub(self: Self, rhs: Self) -> Self {
+        self-rhs
+    }
+
+    fn div(self: Self, rhs: Self) -> Self {
+        self-rhs
+    }
+
+    fn comp(self: Self, rhs: Self) -> Option<Ordering> {
+        todo!()
+    }
+
+    fn rand(r: Range<Self>, thread: &mut ThreadRng) -> Self {
+        thread.gen_range(-50..50)
+    }
+}
 
 impl Number for f32 {
     
