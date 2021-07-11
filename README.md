@@ -2,7 +2,7 @@
 
 This is a simplistic neural network framework written in Rust. 
 The implementation of generics is probably not good and needs some polishing.
-The same counts for the whole code but it works for small things.
+The same applies for the whole code but it "works" for small things.
 
 ## Example
 

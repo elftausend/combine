@@ -3,7 +3,15 @@ use super::number::Number;
 use super::random::random_matrix;
 use super::sum::th_s;
 
-
+#[test]
+fn tew() {
+    let rand0: Matrix<f32> = Matrix::rand(1000, 1000);
+    let rand1 = Matrix::rand(1000, 1000);
+    for _ in 0..100000 {
+        rand0.add(&rand1);
+    }
+    
+}
 
 #[derive(Debug, Clone)]
 pub struct Matrix<T> {
